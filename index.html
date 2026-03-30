@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Desbloqueo Conversacional — Minicurso 7 días</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --espresso:    #5c504b;
+      --salmon:      #d9a79d;
+      --blush:       #dbc9c3;
+      --latte:       #bdaba5;
+      --cream:       #f7f2ef;
+      --white:       #ffffff;
+      --salmon-pale: #f2e4e0;
+      --salmon-mid:  #e8c4bc;
+      --blush-deep:  #c9b5af;
+      --latte-dark:  #a8948e;
+      --espresso-light: #7a6d68;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    .dc { font-family:'Lato', sans-serif; background:var(--cream); color:var(--espresso); overflow-x:hidden; line-height:1.7; }
+    .dc h1,.dc h2,.dc h3,.dc h4,.dc h5 { font-family:'Playfair Display', serif; font-weight:700; line-height:1.15; }
+    .dc-label { font-family:'Lato', sans-serif; font-size:10px; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:var(--salmon); display:flex; align-items:center; gap:10px; margin-bottom:18px; }
+    .dc-label::before { content:''; display:inline-block; width:24px; height:2px; background:var(--salmon); border-radius:2px; }
+    .dc-hero { background:linear-gradient(150deg, var(--salmon-pale) 0%, var(--blush) 50%, var(--salmon-mid) 100%); min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:100px 32px 80px; position:relative; overflow:hidden; }
+    .dc-hero::before { content:''; position:absolute; top:-160px; right:-160px; width:600px; height:600px; border-radius:50%; background:radial-gradient(circle, rgba(255,255,255,0.55) 0%, transparent 65%); pointer-events:none; }
+    .dc-hero::after { content:''; position:absolute; bottom:-100px; left:-100px; width:440px; height:440px; border-radius:50%; background:radial-gradient(circle, rgba(92,80,75,0.07) 0%, transparent 65%); pointer-events:none; }
+    .dc-hero-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.7); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,0.9); color:var(--espresso); font-size:10px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; padding:9px 22px; border-radius:100px; margin-bottom:40px; opacity:0; animation:fadeUp 0.7s ease 0.1s forwards; }
+    .dc-hero-badge span { width:6px; height:6px; background:var(--espresso); border-radius:50%; opacity:0.5; }
+    .dc-hero h1 { font-size:clamp(50px,9vw,100px); color:var(--espresso); letter-spacing:-0.02em; opacity:0; animation:fadeUp 0.7s ease 0.2s forwards; }
+    .dc-hero h1 em { font-style:italic; color:var(--white); -webkit-text-stroke:1px rgba(92,80,75,0.2); }
+    .dc-hero-sub { font-size:clamp(15px,2vw,18px); font-weight:300; color:var(--espresso); max-width:480px; margin-top:24px; opacity:0; animation:fadeUp 0.7s ease 0.35s forwards; }
+    .dc-hero-pills { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:48px; opacity:0; animation:fadeUp 0.7s ease 0.5s forwards; }
+    .dc-hero-pill { background:rgba(255,255,255,0.65); backdrop-filter:blur(6px); border:1px solid rgba(255,255,255,0.85); color:var(--espresso); font-size:12px; font-weight:700; letter-spacing:0.06em; padding:10px 24px; border-radius:100px; text-align:center; }
+    .dc-hero-pill strong { font-size:15px; display:block; font-family:'Playfair Display',serif; }
+    .dc-quote { background:var(--espresso); padding:80px 32px; text-align:center; }
+    .dc-quote blockquote { font-family:'Playfair Display',serif; font-size:clamp(20px,3.5vw,32px); font-style:italic; font-weight:700; color:var(--salmon-pale); max-width:680px; margin:0 auto 20px; line-height:1.45; }
+    .dc-quote cite { font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:var(--latte); font-style:normal; }
+    .dc-nav { background:var(--white); padding:60px 32px; border-bottom:1px solid var(--blush); }
+    .dc-nav-inner { max-width:1080px; margin:0 auto; }
+    .dc-nav h2 { font-size:clamp(24px,3.5vw,38px); color:var(--espresso); margin-bottom:40px; }
+    .dc-nav-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px; }
+    .dc-nav-item { display:flex; align-items:center; gap:16px; background:var(--cream); border:1.5px solid var(--blush); border-radius:14px; padding:20px 22px; transition:border-color 0.25s, transform 0.25s; text-decoration:none; }
+    .dc-nav-item:hover { border-color:var(--salmon); transform:translateX(4px); }
+    .dc-nav-day-n { font-family:'Playfair Display',serif; font-size:28px; font-weight:700; color:var(--salmon); line-height:1; flex-shrink:0; min-width:40px; }
+    .dc-nav-item-tag { font-size:9px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--latte-dark); }
+    .dc-nav-item-title { font-size:15px; font-weight:700; color:var(--espresso); font-family:'Playfair Display',serif; }
+    .dc-outcomes { background:var(--cream); padding:100px 32px; }
+    .dc-outcomes-inner { max-width:1080px; margin:0 auto; }
+    .dc-outcomes h2 { font-size:clamp(30px,4.5vw,48px); color:var(--espresso); margin-bottom:52px; max-width:520px; }
+    .dc-outcomes-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; }
+    .dc-outcome-card { background:var(--white); border-radius:16px; padding:36px 32px; border:1.5px solid var(--blush); position:relative; overflow:hidden; transition:border-color 0.25s, transform 0.25s; }
+    .dc-outcome-card:hover { border-color:var(--salmon); transform:translateY(-4px); }
+    .dc-outcome-card::after { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--salmon),var(--blush)); opacity:0; transition:opacity 0.25s; }
+    .dc-outcome-card:hover::after { opacity:1; }
+    .dc-outcome-n { font-family:'Playfair Display',serif; font-size:40px; font-weight:700; color:var(--blush); margin-bottom:14px; line-height:1; }
+    .dc-outcome-card p { font-size:14px; color:var(--latte-dark); line-height:1.7; }
+    .dc-lesson { padding:100px 32px; position:relative; }
+    .dc-lesson-inner { max-width:1080px; margin:0 auto; }
+    .dc-lesson-header { margin-bottom:56px; }
+    .dc-lesson-header h2 { font-size:clamp(32px,5vw,58px); color:var(--espresso); margin-top:8px; max-width:700px; }
+    .dc-lesson-intro { font-size:clamp(15px,1.8vw,17px); font-weight:300; color:var(--latte-dark); max-width:680px; margin-top:20px; line-height:1.8; }
+    .dc-lesson-alt { background:var(--salmon-pale); }
+    .dc-lesson-dark { background:var(--espresso); }
+    .dc-lesson-dark .dc-label { color:var(--salmon); }
+    .dc-lesson-dark .dc-label::before { background:var(--salmon); }
+    .dc-lesson-dark .dc-lesson-header h2 { color:var(--salmon-pale); }
+    .dc-lesson-dark .dc-lesson-intro { color:var(--latte); }
+    .dc-lesson-blush { background:var(--blush); }
+    .dc-lesson-white { background:var(--white); }
+    .dc-body { font-size:15px; color:var(--latte-dark); line-height:1.9; margin-bottom:24px; max-width:760px; }
+    .dc-body strong { color:var(--espresso); font-weight:700; }
+    .dc-body em { font-style:italic; color:var(--espresso-light); }
+    .dc-lesson-dark .dc-body { color:var(--latte); }
+    .dc-lesson-dark .dc-body strong { color:var(--salmon-pale); }
+    .dc-sh { font-family:'Playfair Display',serif; font-size:clamp(22px,3vw,30px); font-weight:700; color:var(--espresso); margin:52px 0 20px; padding-bottom:14px; border-bottom:1px solid var(--blush); }
+    .dc-lesson-dark .dc-sh { color:var(--salmon-pale); border-bottom-color:rgba(219,201,195,0.2); }
+    .dc-lesson-blush .dc-sh { border-bottom-color:var(--blush-deep); }
+    .dc-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin:32px 0; }
+    .dc-card { background:var(--white); border-radius:16px; padding:36px 30px; border:1.5px solid var(--blush); position:relative; overflow:hidden; transition:border-color 0.25s, transform 0.25s; }
+    .dc-card:hover { border-color:var(--salmon); transform:translateY(-4px); }
+    .dc-card-n { font-family:'Playfair Display',serif; font-size:48px; font-weight:700; color:var(--salmon-pale); line-height:1; margin-bottom:16px; }
+    .dc-card h4 { font-size:18px; color:var(--espresso); margin-bottom:10px; }
+    .dc-card p { font-size:13.5px; color:var(--latte-dark); line-height:1.75; }
+    .dc-card ul { padding-left:18px; margin-top:8px; }
+    .dc-card ul li { font-size:13px; color:var(--latte-dark); line-height:1.8; }
+    .dc-lesson-alt .dc-card { background:var(--white); }
+    .dc-lesson-dark .dc-card { background:rgba(255,255,255,0.06); border-color:rgba(219,201,195,0.15); }
+    .dc-lesson-dark .dc-card:hover { border-color:var(--salmon); }
+    .dc-lesson-dark .dc-card h4 { color:var(--salmon-pale); }
+    .dc-lesson-dark .dc-card p, .dc-lesson-dark .dc-card li { color:var(--latte); }
+    .dc-layers { display:flex; flex-direction:column; gap:12px; margin:32px 0; }
+    .dc-layer { border-radius:12px; padding:28px 30px; border-left:4px solid transparent; transition:transform 0.25s; }
+    .dc-layer:hover { transform:translateX(6px); }
+    .dc-layer-1 { background:var(--cream); border-left-color:var(--latte); }
+    .dc-layer-2 { background:var(--salmon-pale); border-left-color:var(--salmon); }
+    .dc-layer-3 { background:var(--blush); border-left-color:var(--espresso); }
+    .dc-layer h4 { font-size:18px; color:var(--espresso); margin-bottom:8px; }
+    .dc-layer p { font-size:14px; color:var(--latte-dark); line-height:1.7; }
+    .dc-layer ul { padding-left:18px; margin-top:8px; }
+    .dc-layer ul li { font-size:13.5px; color:var(--latte-dark); line-height:1.9; }
+    .dc-example { margin:36px 0; border-radius:16px; overflow:hidden; border:1.5px solid var(--blush); }
+    .dc-example-header { background:var(--espresso); padding:14px 24px; font-size:10px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--salmon-pale); display:flex; align-items:center; gap:10px; }
+    .dc-example-header::before { content:''; width:8px; height:8px; background:var(--salmon); border-radius:50%; }
+    .dc-example-body { background:var(--white); }
+    .dc-example-col { padding:24px 28px; }
+    .dc-example-cols { display:grid; grid-template-columns:1fr 1fr; }
+    @media(max-width:640px){ .dc-example-cols{ grid-template-columns:1fr; } }
+    .dc-example-col-bad { border-right:1px solid var(--blush); }
+    .dc-example-col-label { font-size:9px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+    .dc-example-col-bad .dc-example-col-label { color:#c0836d; }
+    .dc-example-col-good .dc-example-col-label { color:#7a9e7e; }
+    .dc-example-col-bad .dc-example-col-label::before { content:'✗'; font-size:13px; }
+    .dc-example-col-good .dc-example-col-label::before { content:'✓'; font-size:13px; }
+    .dc-example-text { font-size:13.5px; color:var(--espresso); line-height:1.75; font-style:italic; }
+    .dc-example-note { font-size:12px; color:var(--latte-dark); margin-top:10px; line-height:1.65; font-style:normal; }
+    .dc-example-single { background:var(--white); padding:24px 28px; }
+    .dc-example-single .dc-example-col-label { color:var(--salmon); margin-bottom:12px; }
+    .dc-example-single .dc-example-col-label::before { content:'✦'; font-size:11px; }
+    .dc-template { background:var(--cream); border-left:4px solid var(--salmon); border-radius:0 12px 12px 0; padding:20px 24px; font-size:13.5px; color:var(--espresso); line-height:1.85; margin:20px 0; font-family:'Lato', monospace; }
+    .dc-template strong { font-weight:700; color:var(--espresso); }
+    .dc-template em { color:var(--salmon); font-style:italic; }
+    .dc-lesson-dark .dc-template { background:rgba(255,255,255,0.06); border-left-color:var(--salmon); color:var(--salmon-pale); }
+    .dc-lesson-dark .dc-template em { color:var(--salmon); }
+    .dc-template-label { font-size:9px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--salmon); margin-bottom:10px; }
+    .dc-tip { background:var(--espresso); border-radius:16px; padding:36px 40px; display:flex; gap:24px; align-items:flex-start; margin:36px 0; }
+    .dc-tip-icon { font-family:'Playfair Display',serif; font-size:40px; font-weight:700; font-style:italic; color:var(--salmon); line-height:1; flex-shrink:0; }
+    .dc-tip h4 { font-size:18px; color:var(--salmon-pale); margin-bottom:8px; }
+    .dc-tip p { font-size:13.5px; color:var(--latte); line-height:1.75; }
+    .dc-tip-light { background:var(--white); border:1.5px solid var(--salmon-mid); }
+    .dc-tip-light h4 { color:var(--espresso); }
+    .dc-tip-light p { color:var(--latte-dark); }
+    .dc-lesson-alt .dc-tip-light { background:var(--salmon-pale); }
+    .dc-exercise { background:var(--white); border-radius:16px; padding:40px 36px; border:1.5px solid var(--blush); margin:40px 0; position:relative; }
+    .dc-exercise::before { content:'Ejercicio'; position:absolute; top:-12px; left:28px; background:var(--salmon); color:var(--white); font-size:9px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; padding:4px 16px; border-radius:100px; }
+    .dc-exercise h4 { font-size:18px; color:var(--espresso); margin-bottom:16px; }
+    .dc-exercise-steps { display:flex; flex-direction:column; gap:12px; }
+    .dc-exercise-step { display:flex; gap:16px; align-items:flex-start; background:var(--cream); border-radius:10px; padding:18px 20px; }
+    .dc-exercise-step-n { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:var(--salmon); line-height:1; flex-shrink:0; min-width:24px; }
+    .dc-exercise-step p { font-size:13.5px; color:var(--espresso); line-height:1.7; }
+    .dc-lesson-alt .dc-exercise { background:var(--white); }
+    .dc-lesson-dark .dc-exercise { background:rgba(255,255,255,0.06); border-color:rgba(219,201,195,0.2); }
+    .dc-lesson-dark .dc-exercise h4 { color:var(--salmon-pale); }
+    .dc-lesson-dark .dc-exercise-step { background:rgba(255,255,255,0.04); }
+    .dc-lesson-dark .dc-exercise-step p { color:var(--latte); }
+    .dc-table-wrap { overflow-x:auto; margin:32px 0; border-radius:14px; border:1.5px solid var(--blush); }
+    .dc-table { width:100%; border-collapse:collapse; background:var(--white); }
+    .dc-table th { background:var(--espresso); color:var(--salmon-pale); font-family:'Lato',sans-serif; font-size:10px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; padding:14px 20px; text-align:left; }
+    .dc-table td { padding:16px 20px; font-size:13.5px; color:var(--espresso); border-bottom:1px solid var(--blush); vertical-align:top; line-height:1.7; }
+    .dc-table tr:last-child td { border-bottom:none; }
+    .dc-table tr:hover td { background:var(--salmon-pale); }
+    .dc-blockquote { border-left:4px solid var(--salmon); padding:20px 28px; margin:32px 0; background:var(--salmon-pale); border-radius:0 12px 12px 0; }
+    .dc-blockquote p { font-family:'Playfair Display',serif; font-size:clamp(16px,2vw,20px); font-style:italic; color:var(--espresso); line-height:1.6; }
+    .dc-lesson-dark .dc-blockquote { background:rgba(242,228,224,0.08); }
+    .dc-lesson-dark .dc-blockquote p { color:var(--salmon-pale); }
+    .dc-checklist-box { background:var(--white); border-radius:16px; padding:36px 32px; border:1.5px solid var(--blush); margin:32px 0; }
+    .dc-checklist-box-title { font-size:10px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--salmon); margin-bottom:24px; padding-bottom:14px; border-bottom:1px solid var(--blush); }
+    .dc-check-item { display:flex; align-items:flex-start; gap:14px; margin-bottom:16px; font-size:14px; color:var(--espresso); line-height:1.6; }
+    .dc-check-item:last-child { margin-bottom:0; }
+    .dc-check-box { width:20px; height:20px; min-width:20px; border:2px solid var(--blush-deep); border-radius:5px; margin-top:2px; transition:border-color 0.2s; flex-shrink:0; }
+    .dc-check-item:hover .dc-check-box { border-color:var(--salmon); }
+    .dc-lesson-dark .dc-checklist-box { background:rgba(255,255,255,0.06); border-color:rgba(219,201,195,0.15); }
+    .dc-lesson-dark .dc-check-item { color:var(--latte); }
+    .dc-lesson-dark .dc-checklist-box-title { border-bottom-color:rgba(219,201,195,0.2); }
+    .dc-divider { width:60px; height:3px; background:linear-gradient(90deg,var(--salmon),var(--blush)); border-radius:2px; margin:40px 0; }
+    .dc-steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin:32px 0; }
+    .dc-step { background:var(--white); border-radius:16px; padding:32px 26px; border:1.5px solid var(--blush); transition:border-color 0.25s, transform 0.25s; }
+    .dc-step:hover { border-color:var(--salmon); transform:translateY(-4px); }
+    .dc-step-n { font-family:'Playfair Display',serif; font-size:48px; font-weight:700; color:var(--salmon-mid); line-height:1; margin-bottom:14px; }
+    .dc-step h4 { font-size:16px; color:var(--espresso); margin-bottom:10px; }
+    .dc-step p { font-size:13px; color:var(--latte-dark); line-height:1.75; font-style:italic; }
+    .dc-lesson-alt .dc-step { background:var(--white); }
+    .dc-lesson-dark .dc-step { background:rgba(255,255,255,0.06); border-color:rgba(219,201,195,0.15); }
+    .dc-lesson-dark .dc-step h4 { color:var(--salmon-pale); }
+    .dc-lesson-dark .dc-step p { color:var(--latte); }
+    .dc-obj-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin:32px 0; }
+    .dc-obj-card { background:var(--white); border-radius:16px; padding:32px 28px; border:1.5px solid var(--salmon-mid); transition:border-color 0.25s; }
+    .dc-obj-card:hover { border-color:var(--salmon); }
+    .dc-obj-q { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; font-style:italic; color:var(--espresso); padding-bottom:16px; margin-bottom:16px; border-bottom:1px solid var(--salmon-mid); }
+    .dc-obj-tag { font-size:9px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--salmon); margin-bottom:8px; }
+    .dc-obj-real { font-size:14px; font-style:italic; color:var(--espresso); font-weight:700; margin-bottom:10px; }
+    .dc-obj-a { font-size:13px; color:var(--latte-dark); line-height:1.75; }
+    .dc-qlist { display:grid; gap:0; margin:32px 0; }
+    .dc-qitem { display:grid; grid-template-columns:64px 1fr; padding:36px 0; border-bottom:1px solid var(--blush); transition:padding-left 0.25s; }
+    .dc-qitem:last-child { border-bottom:none; }
+    .dc-qitem:hover { padding-left:10px; }
+    .dc-qnum { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; font-style:italic; color:var(--salmon); padding-top:3px; }
+    .dc-qbody { padding-left:20px; }
+    .dc-qbody h3 { font-size:22px; color:var(--espresso); margin-bottom:10px; }
+    .dc-qbody > p { font-size:14px; color:var(--latte-dark); line-height:1.8; margin-bottom:12px; }
+    .dc-lesson-dark .dc-qitem { border-bottom-color:rgba(219,201,195,0.15); }
+    .dc-lesson-dark .dc-qbody h3 { color:var(--salmon-pale); }
+    .dc-lesson-dark .dc-qbody > p { color:var(--latte); }
+    .dc-puente-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:10px; margin:32px 0; }
+    @media(max-width:900px){ .dc-puente-grid{ grid-template-columns:repeat(3,1fr); } }
+    @media(max-width:520px){ .dc-puente-grid{ grid-template-columns:repeat(2,1fr); } }
+    .dc-puente-card { background:var(--white); border-radius:14px; padding:28px 16px; text-align:center; transition:transform 0.25s, box-shadow 0.25s; border:1.5px solid var(--blush); }
+    .dc-puente-card:hover { transform:translateY(-5px); box-shadow:0 14px 40px rgba(92,80,75,0.1); }
+    .dc-puente-letter { font-family:'Playfair Display',serif; font-size:52px; font-weight:700; color:var(--salmon); line-height:1; margin-bottom:10px; }
+    .dc-puente-word { font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--espresso); margin-bottom:8px; }
+    .dc-puente-desc { font-size:11.5px; color:var(--latte-dark); line-height:1.65; }
+    .dc-close-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:16px; margin:32px 0; }
+    .dc-close-card { background:var(--white); border-radius:16px; padding:36px 32px; border:1.5px solid var(--blush); transition:border-color 0.25s, transform 0.25s; }
+    .dc-close-card:hover { border-color:var(--salmon); transform:translateY(-4px); }
+    .dc-close-tag { font-size:10px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--salmon); margin-bottom:12px; }
+    .dc-close-card h3 { font-size:22px; color:var(--espresso); margin-bottom:12px; }
+    .dc-close-card > p { font-size:13.5px; color:var(--latte-dark); line-height:1.75; margin-bottom:20px; }
+    .dc-close-why { font-size:12px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--latte-dark); margin:14px 0 6px; }
+    .dc-sys-list { display:flex; flex-direction:column; }
+    .dc-sys-item { display:flex; gap:24px; align-items:flex-start; padding:32px 0; border-bottom:1px solid var(--blush); transition:padding-left 0.25s; }
+    .dc-sys-item:last-child { border-bottom:none; }
+    .dc-sys-item:hover { padding-left:10px; }
+    .dc-sys-dot { width:40px; height:40px; min-width:40px; border-radius:50%; border:2px solid var(--salmon); display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:15px; font-weight:700; color:var(--salmon); margin-top:2px; }
+    .dc-sys-item h4 { font-size:19px; color:var(--espresso); margin-bottom:6px; }
+    .dc-sys-item p { font-size:13.5px; color:var(--latte-dark); line-height:1.7; }
+    .dc-lesson-dark .dc-sys-item { border-bottom-color:rgba(219,201,195,0.12); }
+    .dc-lesson-dark .dc-sys-item h4 { color:var(--salmon-pale); }
+    .dc-lesson-dark .dc-sys-item p { color:var(--latte); }
+    .dc-lesson-dark .dc-sys-dot { border-color:var(--salmon); }
+    .dc-about-stats { display:flex; gap:0; justify-content:center; flex-wrap:wrap; margin:52px 0 40px; background:var(--white); border-radius:16px; overflow:hidden; }
+    .dc-stat-block { flex:1; min-width:140px; padding:36px 24px; text-align:center; border-right:1px solid var(--blush); transition:background 0.25s; }
+    .dc-stat-block:last-child { border-right:none; }
+    .dc-stat-block:hover { background:var(--salmon-pale); }
+    .dc-stat-n { font-family:'Playfair Display',serif; font-size:52px; font-weight:700; color:var(--salmon); line-height:1; margin-bottom:8px; }
+    .dc-stat-l { font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--latte-dark); }
+    .dc-faq-item { padding:32px 0; border-bottom:1px solid var(--blush); }
+    .dc-faq-item:last-child { border-bottom:none; }
+    .dc-faq-item h3 { font-size:21px; color:var(--espresso); margin-bottom:12px; }
+    .dc-faq-item p { font-size:14px; color:var(--latte-dark); line-height:1.8; }
+    .dc-program-overview { background:var(--salmon-pale); padding:100px 32px; }
+    .dc-days { display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:16px; }
+    .dc-day { background:var(--white); border-radius:16px; padding:36px 30px; position:relative; overflow:hidden; transition:transform 0.25s, box-shadow 0.25s; border:1.5px solid transparent; }
+    .dc-day:hover { transform:translateY(-4px); box-shadow:0 16px 48px rgba(92,80,75,0.1); border-color:var(--salmon-mid); }
+    .dc-day-bg-num { position:absolute; top:-8px; right:16px; font-family:'Playfair Display',serif; font-size:100px; font-weight:700; color:var(--salmon-pale); line-height:1; pointer-events:none; user-select:none; }
+    .dc-day-tag { font-size:10px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--salmon); margin-bottom:10px; }
+    .dc-day h3 { font-size:22px; color:var(--espresso); margin-bottom:12px; padding-right:32px; position:relative; z-index:1; }
+    .dc-day p { font-size:13.5px; color:var(--latte-dark); line-height:1.7; }
+    .dc-day-pills { display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+    .dc-day-pill { background:var(--cream); border:1px solid var(--blush); color:var(--espresso); font-size:11px; padding:5px 14px; border-radius:100px; }
+    .dc-ps-list { display:flex; flex-direction:column; gap:14px; margin:32px 0; }
+    .dc-ps-item { background:var(--cream); border-radius:16px; padding:32px 36px; display:grid; grid-template-columns:56px 1fr; gap:24px; align-items:start; border:1.5px solid var(--blush); transition:border-color 0.25s; }
+    .dc-ps-item:hover { border-color:var(--salmon); }
+    .dc-ps-n { font-family:'Playfair Display',serif; font-size:44px; font-weight:700; color:var(--salmon-mid); line-height:1; }
+    .dc-ps-item h3 { font-size:21px; color:var(--espresso); margin-bottom:10px; }
+    .dc-ps-item > div > p { font-size:13.5px; color:var(--latte-dark); line-height:1.8; margin-bottom:14px; }
+    .dc-lesson-alt .dc-ps-item { background:var(--white); }
+    .dc-highlight-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin:32px 0; }
+    .dc-highlight { background:var(--white); border-radius:14px; padding:28px 22px; text-align:center; border:1.5px solid var(--blush); transition:border-color 0.25s, transform 0.25s; }
+    .dc-highlight:hover { border-color:var(--salmon); transform:translateY(-3px); }
+    .dc-highlight-n { font-family:'Playfair Display',serif; font-size:42px; font-weight:700; color:var(--salmon); line-height:1; margin-bottom:6px; }
+    .dc-highlight-l { font-size:11px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--latte-dark); line-height:1.5; }
+    .dc-lesson-dark .dc-highlight { background:rgba(255,255,255,0.06); border-color:rgba(219,201,195,0.15); }
+    .dc-lesson-dark .dc-highlight-l { color:var(--latte); }
+    .dc-footer { background:var(--espresso); padding:60px 32px; text-align:center; }
+    .dc-footer-name { font-family:'Playfair Display',serif; font-size:26px; font-style:italic; font-weight:700; color:var(--salmon-pale); margin-bottom:10px; }
+    .dc-footer-sub { font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--latte); margin-bottom:24px; }
+    .dc-footer-line { width:40px; height:2px; background:var(--salmon); border-radius:2px; margin:24px auto 0; }
+    .dc-lesson-banner { background:linear-gradient(135deg, var(--espresso) 0%, #4a3f3a 100%); padding:80px 32px 60px; position:relative; overflow:hidden; }
+    .dc-lesson-banner::before { content:''; position:absolute; top:-80px; right:-80px; width:320px; height:320px; border-radius:50%; background:radial-gradient(circle, rgba(217,167,157,0.15) 0%, transparent 65%); }
+    .dc-lesson-banner-inner { max-width:1080px; margin:0 auto; }
+    .dc-lesson-banner-day { font-size:11px; font-weight:700; letter-spacing:0.24em; text-transform:uppercase; color:var(--salmon); margin-bottom:14px; }
+    .dc-lesson-banner h2 { font-size:clamp(36px,5.5vw,66px); color:var(--white); margin-bottom:16px; }
+    .dc-lesson-banner-sub { font-size:15px; font-weight:300; color:var(--latte); max-width:560px; line-height:1.75; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    @media(max-width:768px){
+      .dc-tip { flex-direction:column; gap:12px; }
+      .dc-ps-item { grid-template-columns:1fr; gap:8px; }
+      .dc-qitem { grid-template-columns:1fr; }
+      .dc-qnum { margin-bottom:4px; }
+      .dc-qbody { padding-left:0; }
+      .dc-stat-block { border-right:none; border-bottom:1px solid var(--blush); }
+      .dc-stat-block:last-child { border-bottom:none; }
+      .dc-example-cols { grid-template-columns:1fr; }
+      .dc-example-col-bad { border-right:none; border-bottom:1px solid var(--blush); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="dc">
+
+<section class="dc-hero">
+  <div class="dc-hero-badge"><span></span>Minicurso Completo · 7 Días · 7 Lecciones</div>
+  <h1>El Desbloqueo<br><em>Conversacional</em></h1>
+  <p class="dc-hero-sub">Aprende a guiar a tus leads desde el primer mensaje hasta el cierre sin presionar, sin perseguir, sin perder ventas por no saber qué decir.</p>
+  <div class="dc-hero-pills">
+    <div class="dc-hero-pill"><strong>7</strong>lecciones</div>
+    <div class="dc-hero-pill"><strong>7</strong>ejercicios prácticos</div>
+    <div class="dc-hero-pill"><strong>+20</strong>plantillas y scripts</div>
+    <div class="dc-hero-pill"><strong>27€</strong>precio de lanzamiento</div>
+  </div>
+</section>
+
+<section class="dc-quote">
+  <blockquote>"El mejor vendedor no es el que más habla,<br>sino el que mejor pregunta."</blockquote>
+  <cite>— Elena Digital</cite>
+</section>
+
+<section class="dc-nav">
+  <div class="dc-nav-inner">
+    <div class="dc-label">Contenido del curso</div>
+    <h2>7 días para transformar tus conversaciones en ventas</h2>
+    <div class="dc-nav-grid">
+      <a href="#dia1" class="dc-nav-item"><div class="dc-nav-day-n">1</div><div class="dc-nav-item-text"><div class="dc-nav-item-tag">Psicología de la decisión</div><div class="dc-nav-item-title">El mapa mental del cliente</div></div></a>
+      <a href="#dia2" class="dc-nav-item"><div class="dc-nav-day-n">2</div><div class="dc-nav-item-text"><div class="dc-nav-item-tag">Primera impresión</div><div class="dc-nav-item-title">Rapport y conexión real</div></div></a>
+      <a href="#dia3" class="dc-nav-item"><div class="dc-nav-day-n">3</div><div class="dc-nav-item-text"><div class="dc-nav-item-tag">Descubrimiento de necesidades</div><div class="dc-nav-item-title">Las 3 preguntas que lo cambian todo</div></div></a>
+      <a href="#dia4" class="dc-nav-item"><div class="dc-nav-day-n">4</div><div class="dc-nav-item-text"><div class="dc-nav-item-tag">Presentación de solución</div><div class="dc-nav-item-title">De características a beneficios emocionales</div></div></a>
+      <a href="#dia5" class="dc-nav-item"><div class="dc-nav-day-n">5</div><div class="dc-nav-item-text"><div class="dc-nav-item-tag">Manejo de objeciones</div><div class="dc-nav-item-title">Cuando el cliente dice "no"</div></div></a>
+      <a href="#dia6" class="dc-nav-item"><div class="dc-nav-day-n">6</div><div class="dc-nav-item-text"><div class="dc-nav-item-tag">El cierre</div><div class="dc-nav-item-title">Pedir la venta sin miedo</div></div></a>
+      <a href="#dia7" class="dc-nav-item"><div class="dc-nav-day-n">7</div><div class="dc-nav-item-text"><div class="dc-nav-item-tag">Post-venta y multiplicación</div><div class="dc-nav-item-title">La venta no termina cuando pagan</div></div></a>
+    </div>
+  </div>
+</section>
+
+<section class="dc-program-overview">
+  <div class="dc-lesson-inner">
+    <div class="dc-label">El programa</div>
+    <h2 style="font-size:clamp(30px,4.5vw,48px); color:var(--espresso); margin-bottom:52px; max-width:480px;">7 días, un sistema completo</h2>
+    <div class="dc-days">
+      <div class="dc-day"><div class="dc-day-bg-num">1</div><div class="dc-day-tag">Día 1</div><h3>El mapa mental del cliente</h3><p>Entiende la psicología detrás de cada decisión de compra y deja de cometer el error del 90% de los coaches.</p><div class="dc-day-pills"><span class="dc-day-pill">3 capas del cerebro</span><span class="dc-day-pill">Psicología de decisión</span></div></div>
+      <div class="dc-day"><div class="dc-day-bg-num">2</div><div class="dc-day-tag">Día 2</div><h3>Rapport y primera impresión</h3><p>Los primeros 5 minutos lo deciden todo. Construye conexión real en segundos con los 4 pilares del rapport.</p><div class="dc-day-pills"><span class="dc-day-pill">4 pilares del rapport</span><span class="dc-day-pill">Escucha activa</span></div></div>
+      <div class="dc-day"><div class="dc-day-bg-num">3</div><div class="dc-day-tag">Día 3</div><h3>Las 3 preguntas que cambian todo</h3><p>Que el cliente se venda solo. Tu único trabajo es preguntar bien y escuchar.</p><div class="dc-day-pills"><span class="dc-day-pill">Diagnóstico</span><span class="dc-day-pill">Consecuencia</span><span class="dc-day-pill">Visión</span></div></div>
+      <div class="dc-day"><div class="dc-day-bg-num">4</div><div class="dc-day-tag">Día 4</div><h3>De características a beneficios emocionales</h3><p>El modelo PUENTE conecta el dolor del cliente con su visión ideal usando tu programa como el camino.</p><div class="dc-day-pills"><span class="dc-day-pill">Modelo PUENTE</span><span class="dc-day-pill">Beneficios emocionales</span></div></div>
+      <div class="dc-day"><div class="dc-day-bg-num">5</div><div class="dc-day-tag">Día 5</div><h3>Cuando el cliente dice 'no'</h3><p>Las objeciones no son un rechazo, son una petición de más información.</p><div class="dc-day-pills"><span class="dc-day-pill">Método 4 pasos</span><span class="dc-day-pill">Casos prácticos</span></div></div>
+      <div class="dc-day"><div class="dc-day-bg-num">6</div><div class="dc-day-tag">Día 6</div><h3>Pedir la venta sin miedo</h3><p>El cierre humano que no genera presión ni rechazo y que el cliente experimenta como natural.</p><div class="dc-day-pills"><span class="dc-day-pill">3 técnicas de cierre</span><span class="dc-day-pill">El poder del silencio</span></div></div>
+      <div class="dc-day"><div class="dc-day-bg-num">7</div><div class="dc-day-tag">Día 7</div><h3>La venta no termina cuando pagan</h3><p>Post-cierre, fidelización y multiplicación de ingresos.</p><div class="dc-day-pills"><span class="dc-day-pill">3 pasos post-venta</span><span class="dc-day-pill">Referidos naturales</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- DÍA 1 -->
+<div id="dia1"></div>
+<div class="dc-lesson-banner">
+  <div class="dc-lesson-banner-inner">
+    <div class="dc-lesson-banner-day">Día 1 · Fundamentos</div>
+    <h2>El mapa mental del cliente</h2>
+    <p class="dc-lesson-banner-sub">¿Por qué tu lead no compra? La psicología detrás de la decisión.</p>
+  </div>
+</div>
+<section class="dc-lesson dc-lesson-white">
+  <div class="dc-lesson-inner">
+    <div class="dc-label">Bienvenida al Día 1</div>
+    <p class="dc-body">Bienvenido al Día 1 del Desbloqueo Conversacional. Hoy vamos a sentar las bases de todo lo que viene después. Porque si no entiendes cómo funciona la mente de tu cliente, ninguna técnica de ventas funcionará.</p>
+    <div class="dc-sh">La teoría de las 3 capas del cerebro</div>
+    <p class="dc-body">El neurocientífico Paul MacLean propuso que nuestro cerebro tiene 3 partes que evolucionaron en diferentes momentos y que siguen influyendo profundamente en nuestras decisiones.</p>
+    <div class="dc-layers">
+      <div class="dc-layer dc-layer-1"><h4>① Cerebro Reptiliano — El más antiguo</h4><p>Se encarga de la supervivencia. En una conversación de ventas pregunta: <strong>"¿Es seguro? ¿Me están engañando? ¿Puedo confiar?"</strong></p></div>
+      <div class="dc-layer dc-layer-2"><h4>② Cerebro Límbico — El emocional</h4><p>Procesa las emociones y la confianza. Pregunta: <strong>"¿Me cae bien esta persona? ¿Me siento cómodo? ¿Me entiende de verdad?"</strong></p></div>
+      <div class="dc-layer dc-layer-3"><h4>③ Neocórtex — El racional</h4><p>Analiza, razona y compara. Pregunta: <strong>"¿Tiene sentido lógico? ¿El precio es justo? ¿Los beneficios son reales?"</strong></p></div>
+    </div>
+    <div class="dc-sh">El camino correcto: guiar capa por capa</div>
+    <div class="dc-cards">
+      <div class="dc-card"><div class="dc-card-n">1º</div><h4>Genera seguridad (capa reptil)</h4><p>Tu tono de voz y lenguaje corporal deben transmitir calma y confianza. Nada de prisas ni agresividad.</p></div>
+      <div class="dc-card"><div class="dc-card-n">2º</div><h4>Crea conexión emocional (capa límbica)</h4><p>Escucha activa, empatía genuina, validación de emociones. El cliente necesita sentir que lo entiendes.</p></div>
+      <div class="dc-card"><div class="dc-card-n">3º</div><h4>Presenta la lógica (neocórtex)</h4><p>Solo después de que las dos primeras capas estén satisfechas puedes presentar argumentos racionales.</p></div>
+    </div>
+    <div class="dc-exercise">
+      <h4>Ejercicio del Día 1</h4>
+      <div class="dc-exercise-steps">
+        <div class="dc-exercise-step"><div class="dc-exercise-step-n">1</div><p>Piensa en tu última conversación de ventas. ¿En qué capa te enfocaste? ¿Te saltaste alguna?</p></div>
+        <div class="dc-exercise-step"><div class="dc-exercise-step-n">2</div><p>Escribe cómo podrías mejorar esa conversación aplicando el orden de las 3 capas.</p></div>
+      </div>
+    </div>
+    <div class="dc-tip"><div class="dc-tip-icon">✦</div><div><h4>Para mañana</h4><p>En el Día 2 profundizaremos en las capas 1 y 2: cómo generar seguridad y conexión emocional en los primeros 5 minutos.</p></div></div>
+  </div>
+</section>
+
+<!-- DÍA 2 -->
+<div id="dia2"></div>
+<div class="dc-lesson-banner">
+  <div class="dc-lesson-banner-inner">
+    <div class="dc-lesson-banner-day">Día 2 · Conexión</div>
+    <h2>Los primeros 5 minutos</h2>
+    <p class="dc-lesson-banner-sub">Si fallas aquí, no importa lo bueno que sea tu programa.</p>
+  </div>
+</div>
+<section class="dc-lesson dc-lesson-alt">
+  <div class="dc-lesson-inner">
+    <div class="dc-label">Día 2 · Rapport</div>
+    <p class="dc-body">Rapport es esa sensación de conexión y entendimiento mutuo. No es magia ni carisma innato — es un conjunto de técnicas que puedes aprender y practicar.</p>
+    <div class="dc-sh">Los 4 pilares del rapport instantáneo</div>
+    <div class="dc-cards">
+      <div class="dc-card"><div class="dc-card-n">①</div><h4>Lenguaje corporal</h4><ul><li>Postura abierta, manos visibles</li><li>Sonrisa genuina de interés real</li><li>Contacto visual mirando a la cámara</li><li>Asentir mientras escuchas</li></ul></div>
+      <div class="dc-card"><div class="dc-card-n">②</div><h4>Tono de voz</h4><ul><li>Velocidad adaptada al lead</li><li>Volumen claro y seguro</li><li>Pausas tras preguntas importantes</li><li>Calidez genuina</li></ul></div>
+      <div class="dc-card"><div class="dc-card-n">③</div><h4>Escucha activa</h4><ul><li>Parafrasear: "O sea, lo que me dices es..."</li><li>Validar emociones</li><li>Preguntar para profundizar</li><li>No interrumpir nunca</li></ul></div>
+      <div class="dc-card"><div class="dc-card-n">④</div><h4>Sincronización</h4><ul><li>Adapta tu tono al suyo</li><li>Adapta tu lenguaje al suyo</li><li>Usa tu calma como ancla</li></ul></div>
+    </div>
+    <div class="dc-blockquote"><p>"La persona que más habla en una conversación de ventas no es la que vende más. Es la que más aprende del cliente."</p></div>
+    <div class="dc-template"><div class="dc-template-label">Script de apertura — primeros 60 segundos</div>"Hola [nombre], qué alegría tenerte por aquí. ¿Cómo estás? Tómate tu tiempo, estamos aquí sin prisa."<br><br><em>[Escucha su respuesta completa. Asiente. Valida.]</em><br><br>"Me alegra que hayas dado este paso. Cuéntame, ¿qué te ha traído hasta aquí hoy?"</div>
+    <div class="dc-tip"><div class="dc-tip-icon">✦</div><div><h4>Para mañana</h4><p>Las 3 preguntas que hacen que el cliente se venda solo. Aprenderás exactamente qué preguntar y por qué el silencio vale más que cualquier argumento.</p></div></div>
+  </div>
+</section>
+
+<!-- DÍA 3 -->
+<div id="dia3"></div>
+<div class="dc-lesson-banner">
+  <div class="dc-lesson-banner-inner">
+    <div class="dc-lesson-banner-day">Día 3 · Descubrimiento</div>
+    <h2>Las 3 preguntas que cambian todo</h2>
+    <p class="dc-lesson-banner-sub">Si él lo dice, lo cree. Aprender a preguntar bien es aprender a vender sin vender.</p>
+  </div>
+</div>
+<section class="dc-lesson dc-lesson-white">
+  <div class="dc-lesson-inner">
+    <div class="dc-label">Día 3 · Las 3 preguntas</div>
+    <div class="dc-blockquote"><p>"Si tú hablas, vendes tu producto. Si el cliente habla, se vende a sí mismo la necesidad de tu producto."</p></div>
+    <div class="dc-qlist">
+      <div class="dc-qitem">
+        <div class="dc-qnum">01</div>
+        <div class="dc-qbody">
+          <h3>Diagnóstico — el dolor actual</h3>
+          <p>Ancla la conversación en el presente con concreción y urgencia.</p>
+          <div class="dc-template"><div class="dc-template-label">Pregunta exacta</div>"¿Qué está pasando <em>exactamente</em> en tu negocio <em>ahora mismo</em> que te ha llevado a buscar ayuda <em>hoy</em>?"</div>
+        </div>
+      </div>
+      <div class="dc-qitem">
+        <div class="dc-qnum">02</div>
+        <div class="dc-qbody">
+          <h3>Consecuencia — la profundidad del dolor</h3>
+          <p>Hace que el cliente conecte con las consecuencias reales de no resolver el problema.</p>
+          <div class="dc-template"><div class="dc-template-label">Pregunta exacta</div>"Entiendo. ¿Y qué está provocando eso en tus <em>ingresos</em>, en tu <em>energía</em>, en tu <em>confianza</em>?"</div>
+        </div>
+      </div>
+      <div class="dc-qitem">
+        <div class="dc-qnum">03</div>
+        <div class="dc-qbody">
+          <h3>Visión — el deseo</h3>
+          <p>Hace que el cliente visualice el éxito y te da la meta hacia la que trabajar juntos.</p>
+          <div class="dc-template"><div class="dc-template-label">Pregunta exacta</div>"Si pudieras conseguir <em>exactamente</em> lo que necesitas, ¿cómo sería tu situación ideal dentro de 3 meses?"</div>
+        </div>
+      </div>
+    </div>
+    <div class="dc-tip"><div class="dc-tip-icon">✦</div><div><h4>El silencio estratégico</h4><p>Entre cada pregunta, cállate al menos 3 segundos. El silencio incomoda y la gente lo llena con más información valiosa. Quien habla para romper el silencio, pierde posición.</p></div></div>
+    <div class="dc-tip" style="margin-top:0;"><div class="dc-tip-icon">✦</div><div><h4>Para mañana</h4><p>El modelo PUENTE: cómo presentar tu solución conectando el dolor con la visión ideal usando tus características como escalones emocionales.</p></div></div>
+  </div>
+</section>
+
+<!-- DÍA 4 -->
+<div id="dia4"></div>
+<div class="dc-lesson-banner">
+  <div class="dc-lesson-banner-inner">
+    <div class="dc-lesson-banner-day">Día 4 · Presentación</div>
+    <h2>De características a beneficios emocionales</h2>
+    <p class="dc-lesson-banner-sub">El modelo PUENTE transforma cualquier programa en una historia de transformación.</p>
+  </div>
+</div>
+<section class="dc-lesson dc-lesson-alt">
+  <div class="dc-lesson-inner">
+    <div class="dc-label">Día 4 · El modelo PUENTE</div>
+    <div class="dc-puente-grid">
+      <div class="dc-puente-card"><div class="dc-puente-letter">P</div><div class="dc-puente-word">Punto de partida</div><p class="dc-puente-desc">Su dolor actual en sus propias palabras</p></div>
+      <div class="dc-puente-card"><div class="dc-puente-letter">U</div><div class="dc-puente-word">Universo posible</div><p class="dc-puente-desc">Su visión ideal en 3 meses</p></div>
+      <div class="dc-puente-card"><div class="dc-puente-letter">E</div><div class="dc-puente-word">Escalones</div><p class="dc-puente-desc">Las características de tu programa como proceso</p></div>
+      <div class="dc-puente-card"><div class="dc-puente-letter">N</div><div class="dc-puente-word">Nueva realidad</div><p class="dc-puente-desc">Los beneficios funcionales y emocionales</p></div>
+      <div class="dc-puente-card"><div class="dc-puente-letter">T</div><div class="dc-puente-word">Testimonio</div><p class="dc-puente-desc">Alguien como él que ya lo logró</p></div>
+      <div class="dc-puente-card"><div class="dc-puente-letter">E</div><div class="dc-puente-word">Evidencia</div><p class="dc-puente-desc">Datos, casos y garantías</p></div>
+    </div>
+    <div class="dc-table-wrap">
+      <table class="dc-table">
+        <thead><tr><th>Característica</th><th>Beneficio funcional</th><th>Beneficio emocional</th></tr></thead>
+        <tbody>
+          <tr><td>Sesiones 1:1 semanales</td><td>Ajustamos el plan cada semana</td><td>Tranquilidad de no estar solo</td></tr>
+          <tr><td>Material descargable</td><td>Plantillas listas para usar</td><td>Seguridad de tener herramientas probadas</td></tr>
+          <tr><td>Comunidad privada</td><td>Apoyo de otros coaches</td><td>Pertenencia a un grupo que te entiende</td></tr>
+          <tr><td>Seguimiento por WhatsApp</td><td>Respuesta rápida a dudas</td><td>Confianza de no quedarte atascado</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="dc-template"><div class="dc-template-label">Plantilla PUENTE</div>"Según me has contado, ahora mismo estás en <em>[punto de partida en sus palabras]</em>.<br>Lo que realmente quieres es <em>[visión ideal]</em>.<br>Mi programa te lleva de A a B en <em>[tiempo]</em> a través de:<br>— <em>[característica]</em> que te da <em>[beneficio emocional]</em><br>De hecho, <em>[testimonio breve]</em>.<br>¿Te parece que encaja con lo que buscas?"</div>
+  </div>
+</section>
+
+<!-- DÍA 5 -->
+<div id="dia5"></div>
+<div class="dc-lesson-banner">
+  <div class="dc-lesson-banner-inner">
+    <div class="dc-lesson-banner-day">Día 5 · Objeciones</div>
+    <h2>Cuando el cliente dice "no"</h2>
+    <p class="dc-lesson-banner-sub">Las objeciones no son un rechazo — son una petición de más información o una expresión de miedo.</p>
+  </div>
+</div>
+<section class="dc-lesson dc-lesson-white">
+  <div class="dc-lesson-inner">
+    <div class="dc-label">Día 5 · Objeciones</div>
+    <div class="dc-obj-grid">
+      <div class="dc-obj-card"><div class="dc-obj-q">«Es caro»</div><div class="dc-obj-tag">Lo que realmente dice</div><div class="dc-obj-real">"No veo el valor suficiente para justificar el precio."</div><p class="dc-obj-a">No es un problema de dinero, es de valor percibido. Refuerza el PUENTE, no bajes el precio.</p></div>
+      <div class="dc-obj-card"><div class="dc-obj-q">«Déjame pensarlo»</div><div class="dc-obj-tag">Lo que realmente dice</div><div class="dc-obj-real">"Tengo dudas que no me atrevo a expresar."</div><p class="dc-obj-a">Hay una objeción real debajo. Crea un espacio seguro para que la diga.</p></div>
+      <div class="dc-obj-card"><div class="dc-obj-q">«No es el momento»</div><div class="dc-obj-tag">Lo que realmente dice</div><div class="dc-obj-real">"Tengo miedo al cambio o a fracasar."</div><p class="dc-obj-a">El momento perfecto nunca llega solo. Es miedo disfrazado de logística.</p></div>
+    </div>
+    <div class="dc-sh">El método de 4 pasos</div>
+    <div class="dc-steps">
+      <div class="dc-step"><div class="dc-step-n">1</div><h4>Valida</h4><p>"Entiendo completamente. Es una decisión importante."</p></div>
+      <div class="dc-step"><div class="dc-step-n">2</div><h4>Profundiza</h4><p>"¿Qué es exactamente lo que te genera más dudas?"</p></div>
+      <div class="dc-step"><div class="dc-step-n">3</div><h4>Reformula</h4><p>"Si pudiera mostrarte que X no es un problema, ¿avanzarías?"</p></div>
+      <div class="dc-step"><div class="dc-step-n">4</div><h4>Responde con caso</h4><p>"Justo [cliente X] pensaba lo mismo y resultó que..."</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- DÍA 6 -->
+<div id="dia6"></div>
+<div class="dc-lesson-banner">
+  <div class="dc-lesson-banner-inner">
+    <div class="dc-lesson-banner-day">Día 6 · El cierre</div>
+    <h2>Pedir la venta sin miedo</h2>
+    <p class="dc-lesson-banner-sub">Si no preguntas, no vendes. 3 técnicas de cierre humanas que no generan presión.</p>
+  </div>
+</div>
+<section class="dc-lesson dc-lesson-alt">
+  <div class="dc-lesson-inner">
+    <div class="dc-label">Día 6 · Cierre humano</div>
+    <div class="dc-blockquote"><p>"No estás pidiendo un favor. Estás ofreciendo una solución a alguien que la necesita."</p></div>
+    <div class="dc-close-grid">
+      <div class="dc-close-card"><div class="dc-close-tag">Técnica 01 · La más natural</div><h3>Cierre por alternativas</h3><p>Asumes que va a comprar y le das a elegir entre dos opciones. Ambas son una compra.</p><div class="dc-template">"¿Te parece mejor el plan de 3 meses o el de 6 meses con seguimiento extra?"</div></div>
+      <div class="dc-close-card"><div class="dc-close-tag">Técnica 02 · El más poderoso</div><h3>Cierre por resumen</h3><p>Resumes todo lo hablado y lanzas una pregunta de cierre. Refuerza el valor antes de decidir.</p><div class="dc-template">"Entonces, esto resolvería [dolor], te daría [beneficio] y te llevaría a [visión]. ¿Es la solución que necesitas?"</div></div>
+      <div class="dc-close-card"><div class="dc-close-tag">Técnica 03 · Solo si es real</div><h3>Cierre por urgencia real</h3><p>Solo si hay una razón genuina. La urgencia falsa destruye toda la confianza construida.</p><div class="dc-template">"Tengo 2 plazas para este mes. ¿Lo confirmamos hoy y empezamos la semana que viene?"</div></div>
+    </div>
+    <div class="dc-tip"><div class="dc-tip-icon">✦</div><div><h4>El secreto: silencio absoluto tras el cierre</h4><p>Después de tu pregunta de cierre, cállate completamente. Quien habla primero después de una pregunta de cierre, pierde. Ese silencio puede durar 10, 15, 20 segundos. Déjalo estar.</p></div></div>
+  </div>
+</section>
+
+<!-- DÍA 7 -->
+<div id="dia7"></div>
+<div class="dc-lesson-banner">
+  <div class="dc-lesson-banner-inner">
+    <div class="dc-lesson-banner-day">Día 7 · Post-venta</div>
+    <h2>La venta no termina cuando pagan</h2>
+    <p class="dc-lesson-banner-sub">El momento después de la venta es el más crítico para convertir un cliente en un fan de por vida.</p>
+  </div>
+</div>
+<section class="dc-lesson dc-lesson-white">
+  <div class="dc-lesson-inner">
+    <div class="dc-label">Día 7 · Post-venta</div>
+    <div class="dc-ps-list">
+      <div class="dc-ps-item">
+        <div class="dc-ps-n">1</div>
+        <div><h3>Confirmación inmediata — primeros 5 minutos</h3><p>Un mensaje personal y real nada más recibir el pago.</p><div class="dc-template"><div class="dc-template-label">Mensaje</div>"¡Enhorabuena, [nombre]! Acabo de recibir tu pago. Estoy muy feliz de que hayas dado este paso. Te escribo ahora con los siguientes pasos. Un abrazo."</div></div>
+      </div>
+      <div class="dc-ps-item">
+        <div class="dc-ps-n">2</div>
+        <div><h3>Valor extra inesperado — primeras 24 horas</h3><p>Algo que el cliente no esperaba recibir. No hace falta que sea elaborado — solo genuino e inesperado.</p><div class="dc-template"><div class="dc-template-label">Mensaje</div>"Como extra por confiar en mí, te comparto esta plantilla que uso con mis clientes VIP. Es un regalo de bienvenida."</div></div>
+      </div>
+      <div class="dc-ps-item">
+        <div class="dc-ps-n">3</div>
+        <div><h3>Siembra del siguiente nivel — semanas 6-8</h3><p>Sin presión, cuando el cliente ya ve resultados, siembra la idea de un siguiente paso.</p><div class="dc-template"><div class="dc-template-label">Mensaje de referidos</div>"Me alegra mucho que estés viendo resultados. Si conoces a alguien que pueda estar pasando por lo mismo que tú, me encantaría ayudarle. ¿A quién se te ocurre?"</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SISTEMA COMPLETO -->
+<section class="dc-lesson dc-lesson-dark">
+  <div class="dc-lesson-inner">
+    <div class="dc-label">El sistema completo</div>
+    <h2 style="font-size:clamp(30px,4.5vw,52px); color:var(--salmon-pale); margin-bottom:16px; max-width:520px;">De cero al cierre en 7 pasos</h2>
+    <div class="dc-sys-list">
+      <div class="dc-sys-item"><div class="dc-sys-dot">1</div><div><h4>Primer contacto humano y cálido</h4><p>Saludo personalizado que transmita quién eres antes de la llamada.</p></div></div>
+      <div class="dc-sys-item"><div class="dc-sys-dot">2</div><div><h4>Rapport y conexión emocional</h4><p>Lenguaje corporal abierto, escucha activa. Habla menos del 30% en esta fase.</p></div></div>
+      <div class="dc-sys-item"><div class="dc-sys-dot">3</div><div><h4>Las 3 preguntas de diagnóstico</h4><p>Dolor → consecuencia → visión. Silencio de 3 segundos tras cada respuesta.</p></div></div>
+      <div class="dc-sys-item"><div class="dc-sys-dot">4</div><div><h4>Presentación PUENTE</h4><p>Punto de partida → escalones → nueva realidad → testimonio → evidencia.</p></div></div>
+      <div class="dc-sys-item"><div class="dc-sys-dot">5</div><div><h4>Manejo de objeciones</h4><p>Validar → profundizar → reformular → responder con caso similar.</p></div></div>
+      <div class="dc-sys-item"><div class="dc-sys-dot">6</div><div><h4>Cierre humano</h4><p>Alternativas / resumen / urgencia real. Silencio absoluto. Tras el sí, para de vender.</p></div></div>
+      <div class="dc-sys-item"><div class="dc-sys-dot">7</div><div><h4>Post-cierre y referidos</h4><p>Confirmación inmediata → valor extra → siembra → referidos en semana 6-8.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CHECKLIST -->
+<section class="dc-lesson dc-lesson-alt">
+  <div class="dc-lesson-inner">
+    <div class="dc-label">Antes de cada conversación</div>
+    <h2 style="font-size:clamp(28px,4vw,44px); color:var(--espresso); margin-bottom:52px; max-width:460px;">Tu lista de verificación completa</h2>
+    <div class="dc-cards">
+      <div class="dc-checklist-box">
+        <div class="dc-checklist-box-title">✦ Preparación previa</div>
+        <div class="dc-check-item"><div class="dc-check-box"></div><span>Tengo mi saludo personalizado practicado.</span></div>
+        <div class="dc-check-item"><div class="dc-check-box"></div><span>Conozco algo sobre el lead antes de la llamada.</span></div>
+        <div class="dc-check-item"><div class="dc-check-box"></div><span>Tengo mis 3 preguntas de diagnóstico listas.</span></div>
+        <div class="dc-check-item"><div class="dc-check-box"></div><span>Tengo mi presentación PUENTE preparada con casos concretos.</span></div>
+        <div class="dc-check-item"><div class="dc-check-box"></div><span>Tengo mis respuestas a las 3 objeciones más frecuentes.</span></div>
+      </div>
+      <div class="dc-checklist-box">
+        <div class="dc-checklist-box-title">✦ Durante la conversación</div>
+        <div class="dc-check-item"><div class="dc-check-box"></div><span>Empiezo con saludo cálido, sin prisa ni agenda visible.</span></div>
+        <div class="dc-check-item"><div class="dc-check-box"></div><span>Hablo menos del 30% en la primera mitad.</span></div>
+        <div class="dc-check-item"><div class="dc-check-box"></div><span>Hago las 3 preguntas en orden con silencio tras cada una.</span></div>
+        <div class="dc-check-item"><div class="dc-check-box"></div><span>Presento mi solución usando el modelo PUENTE completo.</span></div>
+        <div class="dc-check-item"><div class="dc-check-box"></div><span>Hago mi pregunta de cierre y me quedo en silencio absoluto.</span></div>
+      </div>
+      <div class="dc-checklist-box">
+        <div class="dc-checklist-box-title">✦ Post-venta</div>
+        <div class="dc-check-item"><div class="dc-check-box"></div><span>Confirmación personal e inmediata (primeros 5 min).</span></div>
+        <div class="dc-check-item"><div class="dc-check-box"></div><span>Recurso sorpresa en las primeras 24 horas.</span></div>
+        <div class="dc-check-item"><div class="dc-check-box"></div><span>Pido referidos en semana 6-8 cuando hay resultados.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE ELENA -->
+<section class="dc-lesson dc-lesson-blush" style="text-align:center;">
+  <div class="dc-lesson-inner" style="max-width:860px; margin:0 auto;">
+    <div class="dc-label" style="justify-content:center;">Sobre Elena Digital</div>
+    <h2 style="font-size:clamp(30px,4.5vw,52px); color:var(--espresso); margin-bottom:0;">¿Por qué deberías escucharme?</h2>
+    <div class="dc-about-stats">
+      <div class="dc-stat-block"><div class="dc-stat-n">+15</div><div class="dc-stat-l">Años de experiencia</div></div>
+      <div class="dc-stat-block"><div class="dc-stat-n">+200</div><div class="dc-stat-l">Coaches acompañados</div></div>
+      <div class="dc-stat-block"><div class="dc-stat-n">×3</div><div class="dc-stat-l">Conversión media</div></div>
+      <div class="dc-stat-block"><div class="dc-stat-n">90d</div><div class="dc-stat-l">Para ver resultados</div></div>
+    </div>
+    <p style="font-size:14.5px; color:var(--latte-dark); line-height:1.9; max-width:620px; margin:0 auto;">Llevo más de 15 años trabajando con clientes reales. Mi método no es más automatización ni más embudos complicados — es menos ruido, más conversación, más cierre.</p>
+  </div>
+</section>
+
+<!-- CIERRE -->
+<section class="dc-lesson dc-lesson-dark" style="text-align:center;">
+  <div class="dc-lesson-inner" style="max-width:720px; margin:0 auto;">
+    <div class="dc-label" style="justify-content:center;">Has completado el minicurso</div>
+    <h2 style="font-size:clamp(32px,5vw,58px); color:var(--salmon-pale); margin-bottom:24px;">Esto es solo el principio</h2>
+    <p style="font-size:16px; color:var(--latte); line-height:1.85; margin-bottom:40px;">Enhorabuena. Has completado las 7 lecciones del Desbloqueo Conversacional. Ahora tienes un sistema completo, preguntas probadas, un método para objeciones y técnicas de cierre humanas.</p>
+    <div class="dc-highlight-grid" style="text-align:left;">
+      <div class="dc-highlight"><div class="dc-highlight-n">7</div><div class="dc-highlight-l">Lecciones completadas</div></div>
+      <div class="dc-highlight"><div class="dc-highlight-n">7</div><div class="dc-highlight-l">Ejercicios prácticos</div></div>
+      <div class="dc-highlight"><div class="dc-highlight-n">+20</div><div class="dc-highlight-l">Plantillas y scripts</div></div>
+      <div class="dc-highlight"><div class="dc-highlight-n">1</div><div class="dc-highlight-l">Sistema completo listo</div></div>
+    </div>
+    <div class="dc-tip" style="text-align:left; margin-top:40px;">
+      <div class="dc-tip-icon">✦</div>
+      <div><h4>Tu misión ahora</h4><p>Aplica lo aprendido con los próximos 5 leads que recibas. La práctica es lo que convierte el conocimiento en habilidad, y la habilidad es lo que convierte las conversaciones en ingresos.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="dc-footer">
+  <div class="dc-footer-name">Elena Digital</div>
+  <div class="dc-footer-sub">El Desbloqueo Conversacional · Minicurso 7 días · 27€</div>
+  <div class="dc-footer-line"></div>
+</div>
+
+</div>
+</body>
+</html>
